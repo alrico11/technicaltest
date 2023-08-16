@@ -16,7 +16,7 @@ data class AuthServiceImpl(
     private var lastGeneratedTime: Long = 0
 ): AuthService{
     override fun insert(): ResBaseDto<Any> {
-        val exp = 3600000L
+        val exp = 5000L
         val currentTime = System.currentTimeMillis()
         if (token == null || currentTime - lastGeneratedTime >= 5000) {
             token = JWTGenerator().createJWT(exp)
@@ -39,7 +39,7 @@ data class AuthServiceImpl(
     }
     override fun isTokenValid(): Boolean {
         val currentTime = System.currentTimeMillis()
-        val expirationTime = lastGeneratedTime + 100000
+        val expirationTime = lastGeneratedTime + 5000
         return token != null && currentTime < expirationTime
     }
 }
