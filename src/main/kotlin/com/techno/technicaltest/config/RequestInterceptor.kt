@@ -36,14 +36,13 @@ class RequestInterceptor(
         val auth = request.getHeader("Authorization")
         if (request.servletPath == "/apiservice/unit/getbrand") {
             if (apiKey != "123-123-123" || auth.isNullOrEmpty() || !auth.startsWith("Bearer ") ) {
-                println("GAMASUK SINI")
                 throw CustomExceptionHandler("You dont have permission to access the api")
             }
             val token = auth.substring(7)
             if (authService.isTokenValid()) {
                 return true
             } else {
-                response.status = HttpServletResponse.SC_UNAUTHORIZED
+                response.status = HttpServletResponse.SC_FORBIDDEN
                 val result = jacksonObjectMapper().writeValueAsString(ResBaseDto("F", "Signature Not Valid", ""))
                 response.writer.write(result)
                 response.contentType = "application/json"
