@@ -43,7 +43,13 @@ class RequestInterceptor(
             if (authService.isTokenValid()) {
                 return true
             } else {
-                throw CustomExceptionHandler("Signature Not Valid")
+                response.status = HttpServletResponse.SC_UNAUTHORIZED
+                val result = jacksonObjectMapper().writeValueAsString(ResBaseDto("F", "Signature Not Valid", ""))
+                response.writer.write(result)
+                response.contentType = "application/json"
+                response.characterEncoding = "UTF-8"
+                response.status = 403
+                return false
             }
             return true
         }
